@@ -198,6 +198,13 @@ namespace App
             isAlive = false;
             EffectsSystem.AddEffect(2, transform.position);
             Visuals.gameObject.SetActive(false);
+            if (carrying != null)
+            {
+                carrying.Carrier = null;
+                carrying.GridPosition = GridPosition;
+                carrying.SnapToGrid();
+                carrying = null;
+            }
             AudioSystem.Instance().Play("SoundDeath");
             StartCoroutine(Respawn(3));
         }
@@ -209,6 +216,16 @@ namespace App
             DestinationGridPosition =  GridPosition;
             SnapToGrid();
             Visuals.gameObject.SetActive(true);
+            isAlive = true;
+        }
+
+        public void SetMovement(Vector2 direction)
+        {
+            if (inputPaused || !isAlive)
+            {
+                return;
+            }
+            movement = direction;
         }
     }
 }

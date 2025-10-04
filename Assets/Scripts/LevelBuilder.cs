@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameBase.Utils;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace App
 {
@@ -161,6 +162,11 @@ namespace App
             //inst.localPosition = new Vector3(Rnd.Range(0, 7) * CellSize.x, 50, Rnd.Range(0, 7) * CellSize.y);
             var h = inst.GetComponent<Hero>();
             h.IsControlledByPlayer = isPlayer;
+            if (!isPlayer)
+            {
+                var b = inst.GetComponent<Brain>();
+                b.IsRunning = true;
+            }
             do
             {
                 h.GridPosition = new Vector2(Rnd.Range(0, 7), Rnd.Range(0, 7));
@@ -201,6 +207,27 @@ namespace App
                     hero.IsInputDisabled = true;
                 }
             }
+        }
+
+        public Collectible FindClosestCollectible(Vector2 gridPosition, bool canBePickedUp = false)
+        {
+            Collectible closest = null;
+            float distance = float.MaxValue;
+            foreach (var collectible in inGameCollectibles)
+            {
+                var c =  collectible.GetComponent<Collectible>();
+                if (canBePickedUp && !c.CanPickUp)
+                {
+                    continue;
+                }
+                var d = Vector2.Distance(c.GridPosition, gridPosition);
+                if (d < distance)
+                {
+                    closest = c;
+                    distance = d;
+                }
+            }
+            return closest;
         }
     }
 }

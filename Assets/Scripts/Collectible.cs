@@ -185,5 +185,11 @@ namespace App
             levelBuilder.RemoveInGameCollectible(transform);
             Destroy(gameObject);
         }
+        
+        public void SnapToGrid()
+        {
+            transform.localPosition = new Vector3(GridPosition.x * levelBuilder.CellSize.x, 1, GridPosition.y * levelBuilder.CellSize.y);
+        }
+
     }
 }
