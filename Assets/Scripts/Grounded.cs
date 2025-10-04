@@ -7,7 +7,10 @@ namespace App
 {
     public class Grounded : MonoBehaviour
     {
+        public delegate void OnHitGroundDelegate();
+
         public bool OnGround = false;
+        public OnHitGroundDelegate OnHitGround;
         private BoxCollider groundCollider;
         private Vector3 startPoint = Vector3.zero;
         private RaycastHit[] hits = new RaycastHit[10];
@@ -22,10 +25,14 @@ namespace App
         private void Update()
         {
             startPoint = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            if (CollidesWithGround())
+            if (!OnGround && CollidesWithGround())
             {
                 OnGround = true;
                 transform.position = transform.position + Vector3.down * distance;
+                if (OnHitGround != null)
+                {
+                    OnHitGround();
+                }
             }
         }
         
@@ -33,13 +40,15 @@ namespace App
         {
             ray = new Ray(startPoint, Vector3.down);
             Debug.DrawRay(ray.origin, ray.direction * 1f, Color.coral);
-            if (Physics.RaycastNonAlloc(ray, hits, 1f) > 0)
+            var numHits = Physics.RaycastNonAlloc(ray, hits, 1f); 
+            if (numHits > 0)
             {
-                foreach (var hit in hits)
+                for (int i = 0 ; i < numHits; i++)
                 {
-                    Debug.Log("Collided with " + hit.collider.gameObject.name);
+                    RaycastHit hit = hits[i];
                     if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
+                        //Debug.Log("Collided with " + hit.collider.gameObject.name);
                         distance = hit.distance;
                         return true;
                     }

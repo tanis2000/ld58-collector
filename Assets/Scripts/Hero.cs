@@ -8,27 +8,63 @@ namespace App
     {
         public Vector2 GridPosition;
         public float Speed = 5;
+        public bool IsControlledByPlayer = true;
         private Vector2 DestinationGridPosition = Vector2.zero;
         private Vector3 DestinationPosition = Vector3.zero;
         private InputAction moveAction;
         private Vector2 movement = Vector2.zero;
+        private Vector2 oldMovement = Vector2.zero;
         private bool inputPaused = false;
         private Vector2 cellSize = new Vector2(2, 2);
+        private LevelBuilder levelBuilder;
+        private Collectible carrying;
+        private SubmitScore submitScore;
+        private int counter;
 
         private void Start()
         {
             moveAction = InputSystem.actions.FindAction("Move");
+            levelBuilder = FindFirstObjectByType<LevelBuilder>();
+            submitScore = FindFirstObjectByType<SubmitScore>();
             DestinationGridPosition = GridPosition;
             SnapToGrid();
         }
 
         private void Update()
         {
-            
-            ProcessInput();
+            if (IsControlledByPlayer)
+            {
+                ProcessInput();
+            }
             if (movement.magnitude != 0)
             {
-                MoveToGridPosition(movement);
+                var possibleDestinationPosition = ComputeDestinationGridPosition(movement);
+                var c = levelBuilder.CollectibleAtGridPosition(possibleDestinationPosition);
+                if (c != null && c.CanPickUp && !carrying)
+                {
+                    Debug.Log("Trying to pick up");
+                    // Pick up
+                    MoveToGridPosition(movement);
+                    ProcessPickup(possibleDestinationPosition);
+                }
+                else if (c != null && !c.CanPickUp && !carrying)
+                {
+                    Debug.Log("Trying to push");
+                    // Push the pile
+                    MoveToGridPosition(movement);
+                    c.PushPile(movement);
+                }
+                else if (c != null && carrying)
+                {
+                    Debug.Log("Trying to drop");
+                    // Drop
+                    ProcessPickup(possibleDestinationPosition);
+                }
+                else if (c == null)
+                {
+                    // Just move to an empty cell
+                    MoveToGridPosition(movement);
+                }
             }
 
             ProcessMovement();
@@ -41,31 +77,37 @@ namespace App
 
         private void ProcessInput()
         {
+            oldMovement = movement;
             movement = Vector2.zero;
-            if (inputPaused)
+            if (inputPaused || !moveAction.WasPerformedThisFrame())
             {
                 return;
             }
             var moveValue = moveAction.ReadValue<Vector2>();
-            if (moveValue.x > 0)
+            if (moveValue.x > 0 && oldMovement.x == 0)
             {
                 movement.x = 1;
-            } else if (moveValue.x < 0)
+            } else if (moveValue.x < 0 && oldMovement.x == 0)
             {
                 movement.x = -1;
             }
 
-            if (moveValue.y > 0)
+            if (moveValue.y > 0 && oldMovement.y == 0)
             {
                 movement.y = 1;
             }
-            else if (moveValue.y < 0)
+            else if (moveValue.y < 0 && oldMovement.y == 0)
             {
                 movement.y = -1;
             }
 
         }
 
+        public Vector2 ComputeDestinationGridPosition(Vector2 direction)
+        {
+            return GridPosition + direction;
+        }
+        
         private void MoveToGridPosition(Vector2 direction)
         {
             DestinationGridPosition = GridPosition + direction;
@@ -87,6 +129,35 @@ namespace App
             {
                 GridPosition = DestinationGridPosition;
             }
+        }
+
+        private void ProcessPickup(Vector2 possibleDestinationPosition)
+        {
+            var c = levelBuilder.CollectibleAtGridPosition(possibleDestinationPosition);
+            if (c != null)
+            {
+                if (!carrying && c.CanPickUp && !c.IsFalling)
+                {
+                    PickUp(c);
+                }
+                else if (carrying != c && !c.IsFalling)
+                {
+                    DropOn(c);
+                }
+            }
+        }
+
+        private void PickUp(Collectible c)
+        {
+            c.Carrier = this;
+            carrying = c;
+        }
+
+        private void DropOn(Collectible c)
+        {
+            c.AddToPile(carrying);
+            carrying.Carrier = null;
+            carrying = null;
         }
     }
 }

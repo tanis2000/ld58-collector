@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameBase.Utils;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace App
         private Transform FloorsLibrary;
         private List<Transform> Floors = new List<Transform>();
         private Transform Level;
+        private List<Transform> inGameCollectibles = new List<Transform>();
 
         private void Start()
         {
@@ -45,6 +47,66 @@ namespace App
                     inst.transform.localPosition = new Vector3(x * CellSize.x, Rnd.Range(-0.1f, 0.1f), y * CellSize.y);
                 }
             }
+        }
+
+        public void AddInGameCollectible(Transform inGameCollectible)
+        {
+            inGameCollectibles.Add(inGameCollectible);
+        }
+
+        public void RemoveInGameCollectible(Transform inGameCollectible)
+        {
+            inGameCollectibles.Remove(inGameCollectible);
+        }
+
+        public int InGameCollectiblesCount()
+        {
+            return inGameCollectibles.Count;
+        }
+
+        public int PickUpInGameCollectiblesCount()
+        {
+            int count = 0;
+            foreach (var inGameCollectible in inGameCollectibles)
+            {
+                var c = inGameCollectible.GetComponent<Collectible>();
+                if (c.CanPickUp)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        public Collectible CollectibleAtGridPosition(Vector2 pos)
+        {
+            var list = new List<Collectible>();
+            foreach (var inGameCollectible in inGameCollectibles)
+            {
+                var c = inGameCollectible.GetComponent<Collectible>();
+                if (c.GridPosition == pos)
+                {
+                    list.Add(c);
+                }
+            }
+
+            foreach (var c in list)
+            {
+                // Look for the one that is the root of the pile
+                if (c.LevelOnPile == 0)
+                {
+                    return c;
+                }
+            }
+
+            if (list.Count > 0)
+            {
+                // Return any, it does not matter as it should be just one
+                return list[0];
+            }
+
+            return null;
         }
     }
 }

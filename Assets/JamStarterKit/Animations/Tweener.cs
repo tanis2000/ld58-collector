@@ -9,7 +9,7 @@ namespace GameBase.Animations
         public AnimationCurve[] CustomEasings;
         public bool UpdateOnLate;
 
-        private List<TweenAction> actions;
+        private List<TweenAction> actions = new List<TweenAction>();
 
         private static Tweener instance = null;
         public static Tweener Instance => instance;
@@ -17,8 +17,6 @@ namespace GameBase.Animations
         private void Awake()
         {
             instance = this;
-
-            actions = new List<TweenAction>();
         }
 
         private void Update()
