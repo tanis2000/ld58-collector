@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 2240765488451046211}
   - component: {fileID: 4024343764559404910}
   - component: {fileID: 2683027000425455456}
+  - component: {fileID: 6865555389169287443}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -250,6 +251,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::App.Grounded
   OnGround: 0
+--- !u!95 &6865555389169287443
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2311613947240278644}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2f879bb08c67d45af9e79c04429f5efa, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5103803609979286635
 GameObject:
   m_ObjectHideFlags: 0

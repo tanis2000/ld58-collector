@@ -8,6 +8,8 @@ namespace App
 {
     public class Hero: MonoBehaviour
     {
+        private static readonly int MoveAnim = Animator.StringToHash("move");
+
         public Vector2 GridPosition;
         public float Speed = 5;
         public bool IsControlledByPlayer = true;
@@ -24,12 +26,15 @@ namespace App
         private SubmitScore submitScore;
         private int counter;
         private bool isAlive = true;
+        private Animator anim;
+
 
         private void Start()
         {
             moveAction = InputSystem.actions.FindAction("Move");
             levelBuilder = FindFirstObjectByType<LevelBuilder>();
             submitScore = FindFirstObjectByType<SubmitScore>();
+            anim = GetComponent<Animator>();
             DestinationGridPosition = GridPosition;
             SnapToGrid();
         }
@@ -135,6 +140,7 @@ namespace App
             }
             DestinationGridPosition = possibleDest;
             DestinationPosition = new Vector3(DestinationGridPosition.x * cellSize.x, 1, DestinationGridPosition.y * cellSize.y);
+            anim.SetTrigger(MoveAnim);
         }
 
         private void ProcessMovement()
