@@ -90,6 +90,20 @@ namespace App
 
             return count;
         }
+        
+        private bool MatchesCollectibleAtGridPosition(Vector2 gridPosition)
+        {
+            foreach (var c in inGameCollectibles)
+            {
+                var col =  c.GetComponent<Collectible>();
+                if (col.GridPosition == gridPosition)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         public Collectible CollectibleAtGridPosition(Vector2 pos)
         {
@@ -121,6 +135,17 @@ namespace App
             return null;
         }
 
+        public Vector2 FindGridPositionForHero()
+        {
+            var pos = Vector2.zero;
+            do
+            {
+                pos = new Vector2(Rnd.Range(0, 7), Rnd.Range(0, 7));
+            } while (MatchesHeroesGridPosition(pos) || MatchesCollectibleAtGridPosition(pos));
+
+            return pos;
+        }
+        
         private void SpawnCharacter(bool isPlayer, int idx = -1)
         {
             Transform model;

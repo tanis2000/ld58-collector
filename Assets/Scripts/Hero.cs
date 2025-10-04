@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using GameBase.Effects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +11,7 @@ namespace App
         public Vector2 GridPosition;
         public float Speed = 5;
         public bool IsControlledByPlayer = true;
+        public Transform Visuals;
         private Vector2 DestinationGridPosition = Vector2.zero;
         private Vector3 DestinationPosition = Vector3.zero;
         private InputAction moveAction;
@@ -20,6 +23,7 @@ namespace App
         private Collectible carrying;
         private SubmitScore submitScore;
         private int counter;
+        private bool isAlive = true;
 
         private void Start()
         {
@@ -54,9 +58,10 @@ namespace App
                     // Push the pile
                     MoveToGridPosition(movement);
                     c.PushPile(movement);
-                    var h = levelBuilder.HeroAtGridPosition(GridPosition + movement);
+                    var h = levelBuilder.HeroAtGridPosition(GridPosition + movement * 2);
                     if (h != null)
                     {
+                        Debug.Log("Trying to push on a player");
                         h.Kill();
                     }
                 }
@@ -91,7 +96,7 @@ namespace App
         {
             oldMovement = movement;
             movement = Vector2.zero;
-            if (inputPaused || !moveAction.WasPerformedThisFrame())
+            if (inputPaused || !moveAction.WasPerformedThisFrame() || !isAlive)
             {
                 return;
             }
@@ -122,6 +127,7 @@ namespace App
         
         private void MoveToGridPosition(Vector2 direction)
         {
+            transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y));
             var possibleDest = ComputeDestinationGridPosition(direction);
             if (possibleDest.x < 0 || possibleDest.x > 7 || possibleDest.y < 0 || possibleDest.y > 7)
             {
@@ -179,8 +185,19 @@ namespace App
 
         public void Kill()
         {
-            //PlayDeathAnimation();
-            Destroy(gameObject);
+            isAlive = false;
+            EffectsSystem.AddEffect(2, transform.position);
+            Visuals.gameObject.SetActive(false);
+            StartCoroutine(Respawn(3));
+        }
+
+        private IEnumerator Respawn(float time)
+        {
+            yield return new WaitForSeconds(time);
+            GridPosition = levelBuilder.FindGridPositionForHero();
+            DestinationGridPosition =  GridPosition;
+            SnapToGrid();
+            Visuals.gameObject.SetActive(true);
         }
     }
 }

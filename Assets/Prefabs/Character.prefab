@@ -235,6 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::App.Hero
   GridPosition: {x: 0, y: 1}
   Speed: 10
+  IsControlledByPlayer: 1
+  Visuals: {fileID: 5734553762582356942}
 --- !u!114 &2683027000425455456
 MonoBehaviour:
   m_ObjectHideFlags: 0

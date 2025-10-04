@@ -21,7 +21,6 @@ namespace App
         private bool IsMoving;
         private LevelBuilder levelBuilder;
         private SubmitScore submitScore;
-        private Transform debrisPrefab;
 
         private void Start()
         {
@@ -33,7 +32,6 @@ namespace App
             };
             levelBuilder = FindFirstObjectByType<LevelBuilder>();
             submitScore = FindFirstObjectByType<SubmitScore>();
-            debrisPrefab = GameObject.Find("DebrisEffect").transform;
         }
 
         private void Update()
