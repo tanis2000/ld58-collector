@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using GameBase.Audio;
 using GameBase.Effects;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -142,6 +143,7 @@ namespace App
             DestinationGridPosition = possibleDest;
             DestinationPosition = new Vector3(DestinationGridPosition.x * cellSize.x, 1, DestinationGridPosition.y * cellSize.y);
             anim.SetTrigger(MoveAnim);
+            AudioSystem.Instance().Play("SoundWalk");
         }
 
         private void ProcessMovement()
@@ -181,6 +183,7 @@ namespace App
         {
             c.Carrier = this;
             carrying = c;
+            AudioSystem.Instance().Play("SoundPickup");
         }
 
         private void DropOn(Collectible c)
@@ -195,6 +198,7 @@ namespace App
             isAlive = false;
             EffectsSystem.AddEffect(2, transform.position);
             Visuals.gameObject.SetActive(false);
+            AudioSystem.Instance().Play("SoundDeath");
             StartCoroutine(Respawn(3));
         }
 

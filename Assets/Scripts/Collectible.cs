@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameBase.Audio;
 using GameBase.Effects;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace App
             grounded.OnHitGround += () =>
             {
                 IsFalling = false;
+                AudioSystem.Instance().Play("SoundFall");
             };
             levelBuilder = FindFirstObjectByType<LevelBuilder>();
             submitScore = FindFirstObjectByType<SubmitScore>();
@@ -81,6 +83,7 @@ namespace App
             {
                 enemyScore.IncrementScore(1);
             }
+            AudioSystem.Instance().Play("SoundPile");
         }
 
         public void OnAddedToPile(Collectible c, int pileHeight)

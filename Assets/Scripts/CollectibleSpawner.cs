@@ -60,7 +60,7 @@ namespace App
         {
             var csi = new CollectibleSpawnerItem();
             csi.What = RandomCollectible();
-            csi.When = Time.time + 0.8f;
+            csi.When = Time.time + levelBuilder.Rnd.Range(0.2f, 2.0f);
             collectiblesQueue.Enqueue(csi);
         }
 

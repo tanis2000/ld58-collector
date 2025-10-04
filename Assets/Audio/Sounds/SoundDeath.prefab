@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8316578372255126710
+--- !u!1 &4747217918058585342
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1038696507305239904}
-  - component: {fileID: 8884414796922138836}
+  - component: {fileID: 8972373120279697795}
+  - component: {fileID: 9198878766353415975}
   m_Layer: 0
-  m_Name: SoundWhoosh
+  m_Name: SoundDeath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1038696507305239904
+--- !u!4 &8972373120279697795
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8316578372255126710}
+  m_GameObject: {fileID: 4747217918058585342}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 315.35913, y: 0, z: -946.1564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8884414796922138836
+--- !u!114 &9198878766353415975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8316578372255126710}
+  m_GameObject: {fileID: 4747217918058585342}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22ec769ae64e4164bd3dcf58b30152d0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameBase.Audio.AudioCue
   AudioType: 1
   Loop: 0
   Volume:
@@ -70,17 +70,45 @@ MonoBehaviour:
   HighPassFilter: {fileID: 0}
   ChorusFilter: {fileID: 0}
   Clips:
-  - AudioClip: {fileID: 8300000, guid: 794d30003abd84a3183d91b86485b085, type: 3}
-    Weight: 100
+  - AudioClip: {fileID: 8300000, guid: 10708b729b6f43afa820a07e4e6bdc47, type: 3}
+    Weight: 1
     Volume:
       m_min: 1
       m_max: 1
       m_hasMax: 0
       m_hasValue: 0
     Pitch:
+      m_min: 0.9
+      m_max: 1.1
+      m_hasMax: 1
+      m_hasValue: 0
+    StartTime: 0
+    EndTime: 0
+  - AudioClip: {fileID: 8300000, guid: 6044996b7e104adabb709179f091d3eb, type: 3}
+    Weight: 1
+    Volume:
       m_min: 1
       m_max: 1
       m_hasMax: 0
+      m_hasValue: 0
+    Pitch:
+      m_min: -0.9
+      m_max: 1.1
+      m_hasMax: 1
+      m_hasValue: 0
+    StartTime: 0
+    EndTime: 0
+  - AudioClip: {fileID: 8300000, guid: 200a1d2623e245f6afcec6e595075987, type: 3}
+    Weight: 1
+    Volume:
+      m_min: 1
+      m_max: 1
+      m_hasMax: 0
+      m_hasValue: 0
+    Pitch:
+      m_min: -0.9
+      m_max: 1.1
+      m_hasMax: 1
       m_hasValue: 0
     StartTime: 0
     EndTime: 0
