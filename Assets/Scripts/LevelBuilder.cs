@@ -7,9 +7,10 @@ namespace App
 {
     public class LevelBuilder: MonoBehaviour
     {
+        public XRandom Rnd = new XRandom(42);
+        public Vector2 CellSize = new Vector2(2, 2);
         private Transform FloorsLibrary;
         private List<Transform> Floors = new List<Transform>();
-        private XRandom rnd = new XRandom(42);
         private Transform Level;
 
         private void Start()
@@ -30,7 +31,7 @@ namespace App
 
         private Transform RandomFloor()
         {
-            var floor = rnd.Item(Floors);
+            var floor = Rnd.Item(Floors);
             return floor;
         }
         public void Build()
@@ -41,7 +42,7 @@ namespace App
                 {
                     var floor = RandomFloor();
                     var inst = GameObject.Instantiate(floor, Level, true);
-                    inst.transform.localPosition = new Vector3(x, rnd.Range(-0.2f, 0.2f), y);
+                    inst.transform.localPosition = new Vector3(x * CellSize.x, Rnd.Range(-0.1f, 0.1f), y * CellSize.y);
                 }
             }
         }
