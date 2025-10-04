@@ -26,7 +26,7 @@ namespace App
 
         public void Spawn()
         {
-            transform.localPosition = new Vector3(GridPosition.x * 2, 100, GridPosition.y * 2);
+            transform.localPosition = new Vector3(GridPosition.x * 2, 50, GridPosition.y * 2);
         }
 
         public void Destroy()

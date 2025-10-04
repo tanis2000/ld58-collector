@@ -19,6 +19,7 @@ namespace App
         private Queue<CollectibleSpawnerItem> collectiblesQueue = new Queue<CollectibleSpawnerItem>();
         private Transform Level;
         private LevelBuilder levelBuilder;
+        private List<Hero> heroes = new List<Hero>();
         
         private void Start()
         {
@@ -34,7 +35,8 @@ namespace App
             Debug.Log("CollectiblesLibrary count: " + availableCollectibles.Count);
             Level = GameObject.Find("Level").transform;
             levelBuilder = gameObject.GetComponent<LevelBuilder>();
-
+            var h = FindObjectsByType<Hero>(FindObjectsSortMode.None);
+            heroes.AddRange(h);
         }
 
         private void Update()
@@ -76,7 +78,11 @@ namespace App
                 var inst = Instantiate(csi.What, Level, true);
                 inGameCollectibles.Add(inst.transform);
                 var c = inst.GetComponent<Collectible>();
-                c.GridPosition = new Vector2(levelBuilder.Rnd.Range(0, 7), levelBuilder.Rnd.Range(0, 7));
+                do
+                {
+                    c.GridPosition = new Vector2(levelBuilder.Rnd.Range(0, 7), levelBuilder.Rnd.Range(0, 7));
+                } while (MatchesHeroesGridPosition(c.GridPosition));
+
                 c.Spawn();
                 collectiblesQueue.Dequeue();
             }
@@ -85,6 +91,19 @@ namespace App
         public void RemoveCollectibleFromList(Transform item)
         {
             inGameCollectibles.Remove(item);
+        }
+
+        private bool MatchesHeroesGridPosition(Vector2 gridPosition)
+        {
+            foreach (var hero in heroes)
+            {
+                if (hero.GridPosition == gridPosition)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
