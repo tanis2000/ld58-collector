@@ -148,6 +148,5 @@ namespace App
             c.Pile.Clear();
             AddToPile(c);
         }
-
     }
 }

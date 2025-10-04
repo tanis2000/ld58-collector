@@ -154,5 +154,17 @@ namespace App
             }
             return false;
         }
+
+        public Hero HeroAtGridPosition(Vector2 gridPosition)
+        {
+            foreach (var hero in inGameHeroes)
+            {
+                if (hero.GridPosition == gridPosition)
+                {
+                    return hero;
+                }
+            }
+            return null;
+        }
     }
 }

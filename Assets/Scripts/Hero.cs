@@ -40,6 +40,7 @@ namespace App
             {
                 var possibleDestinationPosition = ComputeDestinationGridPosition(movement);
                 var c = levelBuilder.CollectibleAtGridPosition(possibleDestinationPosition);
+                var otherHero = levelBuilder.HeroAtGridPosition(possibleDestinationPosition);
                 if (c != null && c.CanPickUp && !carrying)
                 {
                     Debug.Log("Trying to pick up");
@@ -53,12 +54,23 @@ namespace App
                     // Push the pile
                     MoveToGridPosition(movement);
                     c.PushPile(movement);
+                    var h = levelBuilder.HeroAtGridPosition(GridPosition + movement);
+                    if (h != null)
+                    {
+                        h.Kill();
+                    }
                 }
                 else if (c != null && carrying)
                 {
                     Debug.Log("Trying to drop");
                     // Drop
                     ProcessPickup(possibleDestinationPosition);
+                }
+                else if (c == null && otherHero != null)
+                {
+                    // Swap with the other hero
+                    MoveToGridPosition(movement);
+                    otherHero.MoveToGridPosition(-movement);
                 }
                 else if (c == null)
                 {
@@ -163,6 +175,12 @@ namespace App
             c.AddToPile(carrying);
             carrying.Carrier = null;
             carrying = null;
+        }
+
+        public void Kill()
+        {
+            //PlayDeathAnimation();
+            Destroy(gameObject);
         }
     }
 }
