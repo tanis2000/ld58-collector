@@ -191,5 +191,16 @@ namespace App
             }
             return null;
         }
+
+        public void DisablePlayerInput()
+        {
+            foreach (var hero in inGameHeroes)
+            {
+                if (hero.IsControlledByPlayer)
+                {
+                    hero.IsInputDisabled = true;
+                }
+            }
+        }
     }
 }

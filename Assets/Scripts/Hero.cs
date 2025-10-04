@@ -14,6 +14,7 @@ namespace App
         public float Speed = 5;
         public bool IsControlledByPlayer = true;
         public Transform Visuals;
+        public bool IsInputDisabled;
         private Vector2 DestinationGridPosition = Vector2.zero;
         private Vector3 DestinationPosition = Vector3.zero;
         private InputAction moveAction;
@@ -41,7 +42,7 @@ namespace App
 
         private void Update()
         {
-            if (IsControlledByPlayer)
+            if (IsControlledByPlayer && !IsInputDisabled)
             {
                 ProcessInput();
             }
@@ -62,7 +63,7 @@ namespace App
                     Debug.Log("Trying to push");
                     // Push the pile
                     MoveToGridPosition(movement);
-                    c.PushPile(movement);
+                    c.PushPile(movement, this);
                     var h = levelBuilder.HeroAtGridPosition(GridPosition + movement * 2);
                     if (h != null)
                     {
@@ -184,7 +185,7 @@ namespace App
 
         private void DropOn(Collectible c)
         {
-            c.AddToPile(carrying);
+            c.AddToPile(carrying, this);
             carrying.Carrier = null;
             carrying = null;
         }

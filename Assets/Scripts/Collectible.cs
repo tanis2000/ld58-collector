@@ -21,6 +21,7 @@ namespace App
         private bool IsMoving;
         private LevelBuilder levelBuilder;
         private SubmitScore submitScore;
+        private EnemyScore enemyScore;
 
         private void Start()
         {
@@ -32,6 +33,7 @@ namespace App
             };
             levelBuilder = FindFirstObjectByType<LevelBuilder>();
             submitScore = FindFirstObjectByType<SubmitScore>();
+            enemyScore = FindFirstObjectByType<EnemyScore>();
         }
 
         private void Update()
@@ -66,12 +68,19 @@ namespace App
             Destroy(gameObject);
         }
 
-        public void AddToPile(Collectible c)
+        public void AddToPile(Collectible c, Hero hero)
         {
             c.OnAddedToPile(this, Pile.Count);
             Pile.Add(c);
             CanPickUp = false;
-            submitScore.IncrementScore(1);
+            if (hero.IsControlledByPlayer)
+            {
+                submitScore.IncrementScore(1);
+            }
+            else
+            {
+                enemyScore.IncrementScore(1);
+            }
         }
 
         public void OnAddedToPile(Collectible c, int pileHeight)
@@ -82,7 +91,7 @@ namespace App
             transform.position = c.transform.position + Vector3.up * (0.8f * (LevelOnPile + 1));
         }
 
-        public void PushPile(Vector2 direction)
+        public void PushPile(Vector2 direction, Hero hero)
         {
             if (!IsMoving)
             {
@@ -98,18 +107,18 @@ namespace App
                     if (col.CanPickUp)
                     {
                         // Add to pile
-                        AddToPile(col);
+                        AddToPile(col, hero);
                     } else if (!col.CanPickUp)
                     {
                         // Add the whole pile to this one
-                        MoveToThisPile(col);
+                        MoveToThisPile(col, hero);
                     }
                 }
                 
                 MoveToGridPosition(direction);
                 foreach (Collectible c in Pile)
                 {
-                    c.PushPile(direction);
+                    c.PushPile(direction, hero);
                 }
             }
         }
@@ -142,14 +151,14 @@ namespace App
             return GridPosition + direction;
         }
 
-        private void MoveToThisPile(Collectible c)
+        private void MoveToThisPile(Collectible c, Hero hero)
         {
             foreach (var p in c.Pile)
             {
-                AddToPile(p);
+                AddToPile(p, hero);
             }
             c.Pile.Clear();
-            AddToPile(c);
+            AddToPile(c, hero);
         }
 
         private void ProcessMaxHeight()
