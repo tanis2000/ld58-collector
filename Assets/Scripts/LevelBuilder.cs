@@ -13,7 +13,9 @@ namespace App
         private Transform FloorsLibrary;
         private List<Transform> Floors = new List<Transform>();
         private Transform Level;
+        private List<Transform> heroesLibrary = new List<Transform>();
         private List<Transform> inGameCollectibles = new List<Transform>();
+        private List<Hero> inGameHeroes = new List<Hero>();
 
         private void Start()
         {
@@ -28,7 +30,17 @@ namespace App
             }
             Debug.Log("FloorsLibrary count: " + Floors.Count);
             Level = GameObject.Find("Level").transform;
+
+            var hl = GameObject.Find("Heroes");
+            var hm = hl.GetComponentsInChildren<Hero>();
+            foreach (var h in hm)
+            {
+                heroesLibrary.Add(h.transform);
+            }
+            
             Build();
+            SpawnCharacter(true, 0);
+            SpawnCharacter(false, 1);
         }
 
         private Transform RandomFloor()
@@ -107,6 +119,40 @@ namespace App
             }
 
             return null;
+        }
+
+        private void SpawnCharacter(bool isPlayer, int idx = -1)
+        {
+            Transform model;
+            if (idx == -1)
+            {
+                model = Rnd.Item(heroesLibrary);
+            }
+            else
+            {
+                model = heroesLibrary[idx];
+            }
+            var inst = Instantiate(model, Level, true);
+            //inst.localPosition = new Vector3(Rnd.Range(0, 7) * CellSize.x, 50, Rnd.Range(0, 7) * CellSize.y);
+            var h = inst.GetComponent<Hero>();
+            h.IsControlledByPlayer = isPlayer;
+            do
+            {
+                h.GridPosition = new Vector2(Rnd.Range(0, 7), Rnd.Range(0, 7));
+            } while (MatchesHeroesGridPosition(h.GridPosition));
+            inGameHeroes.Add(h);
+        }
+
+        private bool MatchesHeroesGridPosition(Vector2 gridPosition)
+        {
+            foreach (var hero in inGameHeroes)
+            {
+                if (hero.GridPosition == gridPosition)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

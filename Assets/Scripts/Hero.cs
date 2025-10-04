@@ -110,7 +110,12 @@ namespace App
         
         private void MoveToGridPosition(Vector2 direction)
         {
-            DestinationGridPosition = GridPosition + direction;
+            var possibleDest = ComputeDestinationGridPosition(direction);
+            if (possibleDest.x < 0 || possibleDest.x > 7 || possibleDest.y < 0 || possibleDest.y > 7)
+            {
+                return;
+            }
+            DestinationGridPosition = possibleDest;
             DestinationPosition = new Vector3(DestinationGridPosition.x * cellSize.x, 1, DestinationGridPosition.y * cellSize.y);
         }
 

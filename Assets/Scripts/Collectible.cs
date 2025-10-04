@@ -76,7 +76,7 @@ namespace App
             LevelOnPile = pileHeight + 1;
             CanPickUp = false;
             GridPosition = c.GridPosition;
-            transform.position = c.transform.position + Vector3.up * (1.5f * LevelOnPile);
+            transform.position = c.transform.position + Vector3.up * (0.8f * (LevelOnPile + 1));
         }
 
         public void PushPile(Vector2 direction)
@@ -84,6 +84,11 @@ namespace App
             if (!IsMoving)
             {
                 var tmpGridPosition = ComputeDestinationGridPosition(direction);
+                if (tmpGridPosition.x < 0 || tmpGridPosition.x > 7 || tmpGridPosition.y < 0 || tmpGridPosition.y > 7)
+                {
+                    direction = direction * -1;
+                    tmpGridPosition = ComputeDestinationGridPosition(direction);
+                }
                 var col = levelBuilder.CollectibleAtGridPosition(tmpGridPosition);
                 if (col != null)
                 {
