@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameBase.Effects;
 using UnityEngine;
 
 namespace App
@@ -20,6 +21,7 @@ namespace App
         private bool IsMoving;
         private LevelBuilder levelBuilder;
         private SubmitScore submitScore;
+        private Transform debrisPrefab;
 
         private void Start()
         {
@@ -31,6 +33,7 @@ namespace App
             };
             levelBuilder = FindFirstObjectByType<LevelBuilder>();
             submitScore = FindFirstObjectByType<SubmitScore>();
+            debrisPrefab = GameObject.Find("DebrisEffect").transform;
         }
 
         private void Update()
@@ -50,6 +53,8 @@ namespace App
             {
                 ProcessMovement();
             }
+
+            ProcessMaxHeight();
         }
 
         public void Spawn()
@@ -147,6 +152,28 @@ namespace App
             }
             c.Pile.Clear();
             AddToPile(c);
+        }
+
+        private void ProcessMaxHeight()
+        {
+            if (Pile.Count >= 6)
+            {
+                Dismantle();
+            }
+        }
+
+        private void Dismantle()
+        {
+            foreach (var p in Pile)
+            {
+                EffectsSystem.AddEffect(1, p.transform.position);
+                levelBuilder.RemoveInGameCollectible(p.transform);
+                Destroy(p.gameObject);
+            }
+            EffectsSystem.AddEffect(1, transform.position);
+            Pile.Clear();
+            levelBuilder.RemoveInGameCollectible(transform);
+            Destroy(gameObject);
         }
     }
 }

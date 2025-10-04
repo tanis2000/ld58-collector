@@ -10,9 +10,9 @@ namespace App
     {
         public XRandom Rnd = new XRandom(42);
         public Vector2 CellSize = new Vector2(2, 2);
+        public Transform Level;
         private Transform FloorsLibrary;
         private List<Transform> Floors = new List<Transform>();
-        private Transform Level;
         private List<Transform> heroesLibrary = new List<Transform>();
         private List<Transform> inGameCollectibles = new List<Transform>();
         private List<Hero> inGameHeroes = new List<Hero>();
