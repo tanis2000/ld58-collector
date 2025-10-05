@@ -29,6 +29,7 @@ namespace App
         private int counter;
         private bool isAlive = true;
         private Animator anim;
+        private float heightFromGround = 0.5f;
 
 
         private void Start()
@@ -101,7 +102,7 @@ namespace App
         }
         private void SnapToGrid()
         {
-            transform.localPosition = new Vector3(GridPosition.x * cellSize.x, 1, GridPosition.y * cellSize.y);
+            transform.localPosition = new Vector3(GridPosition.x * cellSize.x, heightFromGround, GridPosition.y * cellSize.y);
         }
 
         private void ProcessInput()
@@ -146,7 +147,7 @@ namespace App
                 return;
             }
             DestinationGridPosition = possibleDest;
-            DestinationPosition = new Vector3(DestinationGridPosition.x * cellSize.x, 1, DestinationGridPosition.y * cellSize.y);
+            DestinationPosition = new Vector3(DestinationGridPosition.x * cellSize.x, heightFromGround, DestinationGridPosition.y * cellSize.y);
             anim.SetTrigger(MoveAnim);
             AudioSystem.Instance().Play("SoundWalk");
         }
