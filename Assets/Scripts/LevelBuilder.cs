@@ -10,7 +10,7 @@ namespace App
 {
     public class LevelBuilder: MonoBehaviour
     {
-        public XRandom Rnd = new XRandom(42);
+        public XRandom Rnd = new XRandom((int)System.DateTime.Now.Ticks);
         public Vector2 CellSize = new Vector2(2, 2);
         public Transform Level;
         private Transform FloorsLibrary;
