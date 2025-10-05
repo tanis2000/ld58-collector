@@ -31,6 +31,7 @@ namespace App
             grounded = GetComponent<Grounded>();
             grounded.OnHitGround += () =>
             {
+                transform.position = new Vector3(transform.position.x, 1, transform.position.z);
                 IsFalling = false;
                 AudioSystem.Instance().Play("SoundFall");
             };
@@ -49,7 +50,7 @@ namespace App
             if (Carrier != null)
             {
                 GridPosition = Carrier.GridPosition;
-                transform.position =  Carrier.transform.position + Vector3.up * 1.5f;
+                transform.position =  Carrier.transform.position + Vector3.up * 2.5f;
             }
 
             if (IsMoving)
@@ -93,7 +94,7 @@ namespace App
             LevelOnPile = pileHeight + 1;
             CanPickUp = false;
             GridPosition = c.GridPosition;
-            transform.position = c.transform.position + Vector3.up * (0.8f * (LevelOnPile + 1));
+            transform.position = c.transform.position + Vector3.up * (0.5f * (LevelOnPile + 1));
         }
 
         public void PushPile(Vector2 direction, Hero hero)
@@ -131,7 +132,7 @@ namespace App
         private void MoveToGridPosition(Vector2 direction)
         {
             DestinationGridPosition = GridPosition + direction;
-            DestinationPosition = new Vector3(DestinationGridPosition.x * 2, LevelOnPile+1, DestinationGridPosition.y * 2);
+            DestinationPosition = new Vector3(DestinationGridPosition.x * 2, 0.5f * (LevelOnPile+1), DestinationGridPosition.y * 2);
             IsMoving = true;
         }
 

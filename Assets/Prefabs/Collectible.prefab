@@ -49,6 +49,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::App.Collectible
   GridPosition: {x: 0, y: 0}
   Speed: 50
+  LevelOnPile: 0
+  CanPickUp: 1
+  Pile: []
+  Carrier: {fileID: 0}
+  IsFalling: 1
 --- !u!114 &2022667134616316400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,26 +146,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
@@ -203,8 +212,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2.0000005, z: 2.0000005}
-  m_Center: {x: 0, y: -3.5527137e-15, z: 1.0000002}
+  m_Size: {x: 1.3208008, y: 0.8811865, z: 1.4975308}
+  m_Center: {x: 0.029693604, y: -0.34901413, z: -0.0037128846}
 --- !u!4 &7959275736366287867 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: afc197e755c5a48fa88e218ee8222f34, type: 3}
