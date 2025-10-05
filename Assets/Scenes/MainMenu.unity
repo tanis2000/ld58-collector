@@ -2477,6 +2477,10 @@ PrefabInstance:
       value: Leaderboards
       objectReference: {fileID: 0}
     - target: {fileID: 6117682636935400285, guid: b743bc1df66f54a499737b7ad90a5f9d, type: 3}
+      propertyPath: GameName
+      value: ld58-coco
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117682636935400285, guid: b743bc1df66f54a499737b7ad90a5f9d, type: 3}
       propertyPath: PageSize
       value: 15
       objectReference: {fileID: 0}
