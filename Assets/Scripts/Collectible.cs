@@ -87,6 +87,7 @@ namespace App
             }
             SetLastTouchedBy(hero);
             AudioSystem.Instance().Play("SoundPile");
+            EffectsSystem.AddTextPopup($"{Pile.Count+1}", new Vector3(transform.position.x, 0.5f * (LevelOnPile+4), transform.position.z));
         }
 
         public void OnAddedToPile(Collectible c, int pileHeight)
@@ -203,6 +204,7 @@ namespace App
                     enemyScore.IncrementScore(1 + Pile.Count);
                 }
             }
+            EffectsSystem.AddTextPopup($"{Pile.Count+1}", new Vector3(transform.position.x, 0.5f * (LevelOnPile+4), transform.position.z));
             Pile.Clear();
             levelBuilder.RemoveInGameCollectible(transform);
             gameObject.SetActive(false);

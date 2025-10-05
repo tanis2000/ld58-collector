@@ -7,6 +7,7 @@ namespace GameBase.Animations
         public float Speed = 1f;
         public float PulsingSpeed;
         public float PulsingMin;
+        public Vector3 Axis =  Vector3.forward;
 
         private float angle;
 
@@ -19,7 +20,7 @@ namespace GameBase.Animations
         {
             var mod = PulsingSpeed > 0 ? Mathf.Abs(Mathf.Sin(Time.time * PulsingSpeed)) + PulsingMin : 1f;
             angle -= Speed * Time.deltaTime * 60f * mod;
-            transform.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            transform.localRotation = Quaternion.Euler(Axis * angle);
         }
 
         public void ChangeSpeed(float s)
