@@ -42,8 +42,8 @@ namespace App
             Debug.Log("Idle entered");
             while (state == BrainState.Idle)
             {
-                Debug.Log("Waiting 1 second");
-                yield return new WaitForSeconds(1.0f);
+                Debug.Log("Idle Waiting 0.1 second");
+                yield return new WaitForSeconds(0.1f);
                 var c = levelBuilder.FindClosestCollectible(hero.GridPosition, true);
                 if (c != null)
                 {
@@ -61,29 +61,24 @@ namespace App
             Debug.Log("PickUp entered");
             while (state == BrainState.PickUp)
             {
-                Debug.Log("Waiting 1 second");
-                yield return new WaitForSeconds(1.0f);
-                var direction = Vector2.zero;
-                if (targetGridPosition.x > hero.GridPosition.x)
-                {
-                    direction.x = 1;
-                } else if (targetGridPosition.x < hero.GridPosition.x)
-                {
-                    direction.x = -1;
-                } else if (targetGridPosition.y > hero.GridPosition.y)
-                {
-                    direction.y = 1;
-                } else if (targetGridPosition.y < hero.GridPosition.y)
-                {
-                    direction.y = -1;
-                }
-                hero.SetMovement(direction);
-                yield return new WaitForSeconds(0.2f);
-                hero.SetMovement(Vector2.zero);
-                yield return new WaitForSeconds(0.2f);
+                Debug.Log("PickUp Waiting 0.1 second");
+                yield return new WaitForSeconds(0.1f);
+                yield return Move();
                 if (hero.GridPosition == targetGridPosition)
                 {
-                    state = BrainState.Idle;
+                    if (hero.IsCarrying())
+                    {
+                        var c = levelBuilder.FindClosestCollectible(hero.GridPosition);
+                        if (c != null)
+                        {
+                            targetGridPosition = c.GridPosition;
+                            state = BrainState.Drop;
+                        }
+                    }
+                    else
+                    {
+                        state = BrainState.Idle;    
+                    }
                 }
                 yield return null;
             }
@@ -91,5 +86,44 @@ namespace App
             StartCoroutine(state.ToString());
         }
 
+        private IEnumerator Drop()
+        {
+            Debug.Log("Drop entered");
+            while (state == BrainState.Drop)
+            {
+                Debug.Log("Drop Waiting 0.1 second");
+                yield return new WaitForSeconds(0.1f);
+                yield return Move();
+                if (hero.GridPosition == targetGridPosition)
+                {
+                    state = BrainState.Idle;    
+                }
+                yield return null;
+            }
+            Debug.Log("Drop exited");
+            StartCoroutine(state.ToString());
+        }
+
+        private IEnumerator Move()
+        {
+            var direction = Vector2.zero;
+            if (targetGridPosition.x > hero.GridPosition.x)
+            {
+                direction.x = 1;
+            } else if (targetGridPosition.x < hero.GridPosition.x)
+            {
+                direction.x = -1;
+            } else if (targetGridPosition.y > hero.GridPosition.y)
+            {
+                direction.y = 1;
+            } else if (targetGridPosition.y < hero.GridPosition.y)
+            {
+                direction.y = -1;
+            }
+            hero.SetMovement(direction);
+            Debug.Log("Move set to " + direction);
+            hero.ProcessMovement();
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }

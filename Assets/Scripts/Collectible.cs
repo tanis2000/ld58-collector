@@ -23,6 +23,7 @@ namespace App
         private LevelBuilder levelBuilder;
         private SubmitScore submitScore;
         private EnemyScore enemyScore;
+        private Hero lastTouchedBy;
 
         private void Start()
         {
@@ -64,10 +65,10 @@ namespace App
             transform.localPosition = new Vector3(GridPosition.x * 2, 50, GridPosition.y * 2);
         }
 
-        public void Destroy()
+        public void Remove(GameObject go)
         {
             collectibleSpawner.RemoveCollectibleFromList(transform);
-            Destroy(gameObject);
+            Destroy(go);
         }
 
         public void AddToPile(Collectible c, Hero hero)
@@ -83,6 +84,7 @@ namespace App
             {
                 enemyScore.IncrementScore(1);
             }
+            SetLastTouchedBy(hero);
             AudioSystem.Instance().Play("SoundPile");
         }
 
@@ -162,6 +164,7 @@ namespace App
             }
             c.Pile.Clear();
             AddToPile(c, hero);
+            SetLastTouchedBy(hero);
         }
 
         private void ProcessMaxHeight()
@@ -176,19 +179,42 @@ namespace App
         {
             foreach (var p in Pile)
             {
+                // Workaround for missing references
+                if (p == null)
+                {
+                    continue;
+                }
                 EffectsSystem.AddEffect(1, p.transform.position);
                 levelBuilder.RemoveInGameCollectible(p.transform);
-                Destroy(p.gameObject);
+                p.gameObject.SetActive(false);
+                Remove(p.gameObject);
             }
             EffectsSystem.AddEffect(1, transform.position);
+            if (lastTouchedBy != null)
+            {
+                if (lastTouchedBy.IsControlledByPlayer)
+                {
+                    submitScore.IncrementScore(1 + Pile.Count);
+                }
+                else
+                {
+                    enemyScore.IncrementScore(1 + Pile.Count);
+                }
+            }
             Pile.Clear();
             levelBuilder.RemoveInGameCollectible(transform);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            Remove(gameObject);
         }
         
         public void SnapToGrid()
         {
             transform.localPosition = new Vector3(GridPosition.x * levelBuilder.CellSize.x, 1, GridPosition.y * levelBuilder.CellSize.y);
+        }
+
+        public void SetLastTouchedBy(Hero hero)
+        {
+            lastTouchedBy = hero;
         }
 
     }

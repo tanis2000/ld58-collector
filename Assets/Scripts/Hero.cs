@@ -43,10 +43,18 @@ namespace App
 
         private void Update()
         {
+            movement = Vector2.zero;
             if (IsControlledByPlayer && !IsInputDisabled)
             {
                 ProcessInput();
             }
+            
+            ProcessMovement();
+            PerformMovement();
+        }
+
+        public void ProcessMovement()
+        {
             if (movement.magnitude != 0)
             {
                 var possibleDestinationPosition = ComputeDestinationGridPosition(movement);
@@ -54,27 +62,27 @@ namespace App
                 var otherHero = levelBuilder.HeroAtGridPosition(possibleDestinationPosition);
                 if (c != null && c.CanPickUp && !carrying)
                 {
-                    Debug.Log("Trying to pick up");
+                    //Debug.Log("Trying to pick up");
                     // Pick up
                     MoveToGridPosition(movement);
                     ProcessPickup(possibleDestinationPosition);
                 }
                 else if (c != null && !c.CanPickUp && !carrying)
                 {
-                    Debug.Log("Trying to push");
+                    //Debug.Log("Trying to push");
                     // Push the pile
                     MoveToGridPosition(movement);
                     c.PushPile(movement, this);
                     var h = levelBuilder.HeroAtGridPosition(GridPosition + movement * 2);
                     if (h != null)
                     {
-                        Debug.Log("Trying to push on a player");
+                        //Debug.Log("Trying to push on a player");
                         h.Kill();
                     }
                 }
                 else if (c != null && carrying)
                 {
-                    Debug.Log("Trying to drop");
+                    //Debug.Log("Trying to drop");
                     // Drop
                     ProcessPickup(possibleDestinationPosition);
                 }
@@ -90,10 +98,7 @@ namespace App
                     MoveToGridPosition(movement);
                 }
             }
-
-            ProcessMovement();
         }
-
         private void SnapToGrid()
         {
             transform.localPosition = new Vector3(GridPosition.x * cellSize.x, 1, GridPosition.y * cellSize.y);
@@ -146,7 +151,7 @@ namespace App
             AudioSystem.Instance().Play("SoundWalk");
         }
 
-        private void ProcessMovement()
+        private void PerformMovement()
         {
             if (DestinationGridPosition == GridPosition)
             {
@@ -182,6 +187,7 @@ namespace App
         private void PickUp(Collectible c)
         {
             c.Carrier = this;
+            c.CanPickUp = false;
             carrying = c;
             AudioSystem.Instance().Play("SoundPickup");
         }
@@ -203,6 +209,7 @@ namespace App
                 carrying.Carrier = null;
                 carrying.GridPosition = GridPosition;
                 carrying.SnapToGrid();
+                carrying.CanPickUp = true;
                 carrying = null;
             }
             AudioSystem.Instance().Play("SoundDeath");
@@ -227,5 +234,11 @@ namespace App
             }
             movement = direction;
         }
+        
+        public bool IsCarrying()
+        {
+            return carrying != null;
+        }
+
     }
 }

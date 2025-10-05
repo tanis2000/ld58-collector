@@ -220,6 +220,12 @@ namespace App
                 {
                     continue;
                 }
+    
+                // Ignore the one on our same cell
+                if (c.GridPosition == gridPosition)
+                {
+                    continue;
+                }
                 var d = Vector2.Distance(c.GridPosition, gridPosition);
                 if (d < distance)
                 {
