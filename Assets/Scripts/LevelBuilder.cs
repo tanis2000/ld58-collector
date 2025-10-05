@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameBase.Audio;
 using GameBase.Utils;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -42,6 +43,7 @@ namespace App
             Build();
             SpawnCharacter(true, 0);
             SpawnCharacter(false, 1);
+            AudioSystem.Instance().Play("MusicTheme");
         }
 
         private Transform RandomFloor()
